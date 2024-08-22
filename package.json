@@ -1,0 +1,15 @@
+{
+  "name": "which-migration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client:dev": "pnpm --filter client dev",
+    "client:build": "pnpm --filter client build",
+    "example:dev": "pnpm --filter example dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
