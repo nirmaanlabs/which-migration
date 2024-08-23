@@ -3,13 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client:dev": "pnpm --filter client dev",
     "client:build": "pnpm --filter client build",
-    "example:dev": "pnpm --filter example dev"
+    "example:dev": "pnpm --filter example dev",
+    "lint": "pnpx eslint"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "globals": "^15.9.0",
+    "pnpx": "^0.0.1",
+    "typescript-eslint": "^8.0.1"
+  }
 }

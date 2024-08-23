@@ -11,7 +11,7 @@ export async function copyPrismaClient() {
     require.resolve("@which-migration/client/package.json")
   );
 
-  // @ts-ignore
+  // @ts-expect-error just ignore this
   const clientFiles = await packlist({ path: clientPath });
 
   // we copy each file that we found in pkg to a new destination
@@ -19,7 +19,7 @@ export async function copyPrismaClient() {
     if (file.includes("wasm") === false) {
       const from = path.join(clientPath, file);
       const to = path.join(clientCopyPath, file);
-      // @ts-ignore
+      // @ts-expect-error just ignore this
       copySync(from, to, { overwrite: true, recursive: true });
     }
     console.log(file);
