@@ -1,4 +1,4 @@
-import { Client, Pool, PoolClient, PoolConfig } from "pg";
+import { Pool, PoolClient, PoolConfig } from "pg";
 import { EventEmitter } from "stream";
 
 const pool = new Pool();
