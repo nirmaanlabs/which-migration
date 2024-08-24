@@ -7,7 +7,7 @@ interface CustomPoolClient extends PoolClient {
   lastQuery?: any[];
 }
 
-export class ClientPgOps extends EventEmitter {
+export class ClientPg extends EventEmitter {
   #pool: Pool;
 
   constructor(config: PoolConfig) {

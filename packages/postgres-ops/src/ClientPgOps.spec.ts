@@ -1,16 +1,7 @@
 import { Pool, PoolClient } from "pg";
-import { ClientPgOps } from "./client";
+import { ClientPg } from "./ClientPg";
 
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  test,
-  vi,
-  Mock,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 vi.mock("pg", () => {
   const mPoolClient = {
@@ -26,13 +17,13 @@ vi.mock("pg", () => {
 });
 
 describe("Client Pg Ops Intances Properties", () => {
-  let clientPgOps: ClientPgOps;
+  let clientPg: ClientPg;
   let pool: Pool;
   let poolClient: PoolClient;
 
   beforeEach(() => {
     pool = new Pool() as any;
-    clientPgOps = new ClientPgOps({}); // Assuming empty config for the test
+    clientPg = new ClientPg({}); // Assuming empty config for the test
     poolClient = pool.connect() as unknown as PoolClient;
   });
 
@@ -42,7 +33,7 @@ describe("Client Pg Ops Intances Properties", () => {
 
   it('should emit "connect" when connected to the database', () => {
     const connectListener = vi.fn();
-    clientPgOps.on("connect", connectListener);
+    clientPg.on("connect", connectListener);
 
     // Simulate the "connect" event
     (pool.on as Mock).mock.calls[0][1](); // Call the registered listener
@@ -55,7 +46,7 @@ describe("Client Pg Ops Intances Properties", () => {
     const mockResult = { rowCount: 1 };
     (pool.query as Mock).mockResolvedValue(mockResult);
 
-    await clientPgOps.query("SELECT * FROM test_table WHERE id = $1", [1]);
+    await clientPg.query("SELECT * FROM test_table WHERE id = $1", [1]);
 
     expect(pool.query).toHaveBeenCalledWith(
       "SELECT * FROM test_table WHERE id = $1",
@@ -77,7 +68,7 @@ describe("Client Pg Ops Intances Properties", () => {
     poolClient.release = mockRelease;
     const connectSpy = vi.spyOn(pool, "connect");
 
-    const client = await clientPgOps.getClient();
+    const client = await clientPg.getClient();
 
     expect(connectSpy).toHaveBeenCalledTimes(1);
 
