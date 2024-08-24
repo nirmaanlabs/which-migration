@@ -1,4 +1,4 @@
-import { Pool, PoolClient, PoolConfig } from "pg";
+import { Client, Pool, PoolClient, PoolConfig } from "pg";
 import { EventEmitter } from "stream";
 
 const pool = new Pool();
@@ -15,6 +15,7 @@ export class ClientPgOps extends EventEmitter {
     this.#pool = new Pool(config);
 
     this.#pool.on("connect", () => {
+      console.log("----a,");
       this.emit("connect");
     });
     this.#pool.on("error", () => {
@@ -23,7 +24,7 @@ export class ClientPgOps extends EventEmitter {
   }
 
   // Is this type correct ?
-  async query(text: string, params: any[]) {
+  async query(text: string, params?: any[]) {
     const start = Date.now();
     const res = await this.#pool.query(text, params);
     const duration = Date.now() - start;
@@ -33,9 +34,11 @@ export class ClientPgOps extends EventEmitter {
       "Executed in: ",
       duration
     );
+    return res;
   }
 
   async getClient() {
+    console.log("calling connect");
     const client: CustomPoolClient = await pool.connect();
     const query = client.query.bind(client);
     const release = client.release.bind(client);
