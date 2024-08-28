@@ -1,5 +1,13 @@
 import { useState } from "react";
 import "./App.css";
+import { Button } from "@components/ui/button";
+import { Appshell } from "./components/ui/appshell/appshell";
+import { AppshellHeader } from "./components/ui/appshell/appshellheader";
+import { AppshellNavbar } from "./components/ui/appshell/appshellnavbar";
+import { AppshellMain } from "./components/ui/appshell/appshellmain";
+import { AppshellFooter } from "./components/ui/appshell/appshellfooter";
+import { Navbar } from "./components/ui/navbar";
+import { Header } from "./components/ui/header";
 
 function App() {
   const [data, setData] = useState(null);
@@ -16,8 +24,22 @@ function App() {
 
   return (
     <>
-      <button onClick={fetchStatus}>Check status </button>
-      <h1>Data: {JSON.stringify(data)}</h1>
+      <Appshell
+        headerHeight={{ height: "1rem" }}
+        navbarWidth={{ width: "1rem" }}
+      >
+        <AppshellHeader>
+          <Header />
+        </AppshellHeader>
+        <AppshellNavbar>
+          <Navbar />
+        </AppshellNavbar>
+        <AppshellMain>
+          <Button onClick={fetchStatus}>Check status</Button>
+          <h1>Data: {JSON.stringify(data)}</h1>{" "}
+        </AppshellMain>
+        <AppshellFooter> Footer</AppshellFooter>
+      </Appshell>
     </>
   );
 }

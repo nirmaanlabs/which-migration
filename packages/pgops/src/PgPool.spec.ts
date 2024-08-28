@@ -1,5 +1,5 @@
 import { Pool, PoolClient } from "pg";
-import { ClientPg } from "./ClientPg";
+import { PgPool } from "./PgPool";
 
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
@@ -17,13 +17,13 @@ vi.mock("pg", () => {
 });
 
 describe("Client Pg Ops Intances Properties", () => {
-  let clientPg: ClientPg;
+  let clientPg: PgPool;
   let pool: Pool;
   let poolClient: PoolClient;
 
   beforeEach(() => {
     pool = new Pool() as any;
-    clientPg = new ClientPg({}); // Assuming empty config for the test
+    clientPg = new PgPool({}); // Assuming empty config for the test
     poolClient = pool.connect() as unknown as PoolClient;
   });
 

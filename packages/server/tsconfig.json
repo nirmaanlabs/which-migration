@@ -1,5 +1,8 @@
 {
+
   "compilerOptions": {
+
+    
     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     /* Modules */
     "module": "NodeNext",                                /* Specify what module code is generated. */
@@ -8,6 +11,7 @@
     "strict": true,                                      /* Enable all strict type-checking options. */                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true,  
     "outDir": "./dist",   
+
                       /* Skip type checking all .d.ts files. */
   },
   "include": ["src"],
