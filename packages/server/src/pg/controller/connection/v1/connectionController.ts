@@ -2,7 +2,8 @@ import { NextFunction, Response } from "express";
 import { PgPool } from "@which-migration/pgops";
 import { TypedRequestBody } from "../../../../types/TypedRequestBody";
 import { ConnectionBody } from "./types";
-import { setConnection } from "../../../../dbInstances";
+import { removeConnection, setConnection } from "../../../../dbInstances";
+import { PG_DB_MSG, STATUS_MSG } from "../../../constants";
 
 export const establishConnection = async (
   req: TypedRequestBody<ConnectionBody>,
@@ -11,33 +12,30 @@ export const establishConnection = async (
 ) => {
   try {
     //Todo Before doing this add a middleware called is already connected in
-
     const { user, database, password, host, port } = req.body;
     const pool = new PgPool({ user, database, password, host, port });
-    const dbRes = await pool.query("select 1");
+    await pool.query("select 1");
     setConnection("pg", pool);
     res.status(200).json({
-      status: "success",
-      message: "Connected to database successfully !!!",
+      status: STATUS_MSG.SUCCESS,
+      message: PG_DB_MSG.CONNECTED,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 export const selectOne = async (
-  req: TypedRequestBody<{}>,
-  res: Response,
-  next: NextFunction
+  req: TypedRequestBody<object>,
+  res: Response
 ) => {
   try {
     const db = req.db?.pg;
     const dbRes = await db?.query("select 1");
     res.status(200).json({
-      status: "success",
+      status: STATUS_MSG.SUCCESS,
       message: "selectOne",
-      dbRes,
+      data: dbRes?.rows,
     });
   } catch (error) {
     console.log(error);
@@ -45,5 +43,23 @@ export const selectOne = async (
       status: "fail",
       message: "someerror",
     });
+  }
+};
+
+export const disconnect = async (
+  req: TypedRequestBody<object>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const db = req.db?.pg;
+    db?.disconnect();
+    removeConnection("pg");
+    res.status(200).json({
+      status: STATUS_MSG.SUCCESS,
+      message: PG_DB_MSG.DISCONNECTED,
+    });
+  } catch (error) {
+    next(error);
   }
 };

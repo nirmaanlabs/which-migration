@@ -13,7 +13,6 @@ export class PgPool extends EventEmitter {
   constructor(config: PoolConfig) {
     super();
     this.#pool = new Pool(config);
-
     this.#pool.on("connect", () => {
       this.emit("connect");
     });
@@ -43,6 +42,10 @@ export class PgPool extends EventEmitter {
         throw new PgError(error.message, 17, error.name);
       }
     }
+  }
+
+  async disconnect() {
+    return await this.#pool.end();
   }
 
   async getClient() {
