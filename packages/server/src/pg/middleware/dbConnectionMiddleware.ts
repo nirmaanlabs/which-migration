@@ -45,14 +45,16 @@ export const isConnectedToDB = async (
     const dbType = getDBTypeFromBaseUrl(req.baseUrl);
     const db = getConnection(dbType);
     if (db instanceof PgPool) {
+      console.log("already connected");
       await db.query("select 1");
       res.status(200).json({
         status: STATUS_MSG.SUCCESS,
-        message: PG_DB_MSG,
+        message: PG_DB_MSG.CONNECTED,
       });
+    } else {
+      next();
     }
   } catch (error) {
     next(error);
   }
-  next();
 };

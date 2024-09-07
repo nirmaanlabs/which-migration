@@ -1,4 +1,4 @@
-import { Box } from "./box";
+import { Box } from "../ui/box";
 import AppIcon from "@/assets/WH-MG-.ico";
 
 const HeaderContainer = Box;

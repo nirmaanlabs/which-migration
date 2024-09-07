@@ -1,7 +1,7 @@
 export interface ConnectionBody {
-  user: string;
+  dbuser: string;
   database: string;
-  password: string;
+  dbpassword: string;
   host: string;
   port: number;
 }

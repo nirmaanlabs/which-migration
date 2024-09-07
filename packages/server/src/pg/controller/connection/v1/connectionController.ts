@@ -12,15 +12,25 @@ export const establishConnection = async (
 ) => {
   try {
     //Todo Before doing this add a middleware called is already connected in
-    const { user, database, password, host, port } = req.body;
+    const {
+      dbuser: user,
+      database,
+      dbpassword: password,
+      host,
+      port,
+    } = req.body;
     const pool = new PgPool({ user, database, password, host, port });
+    console.log(user, database, password, host, port);
     await pool.query("select 1");
     setConnection("pg", pool);
     res.status(200).json({
       status: STATUS_MSG.SUCCESS,
       message: PG_DB_MSG.CONNECTED,
+      databaseName: database,
+      user: user,
     });
   } catch (error) {
+    console.log("passing error to handler", error instanceof Error);
     next(error);
   }
 };
