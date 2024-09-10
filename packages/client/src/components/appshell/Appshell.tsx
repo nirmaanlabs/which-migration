@@ -34,22 +34,6 @@ export const Appshell = () => {
   const [editorVisible, setEditorVisible] = useState(true);
   const [panelVisible, setPanelVisible] = useState(true);
   const [primarySideBar, setPrimarySideBar] = useState(true);
-  const [primarySideBarPosition, setPrimarySideBarPosition] = useState<
-    "left" | "right"
-  >("left");
-
-  // const auxiliarySidebar = (
-  //   <Allotment.Pane
-  //     key="auxiliarySidebar"
-  //     minSize={170}
-  //     priority={LayoutPriority.Low}
-  //     preferredSize={300}
-  //     visible={secondarySideBar}
-  //     snap
-  //   >
-  //     <AuxiliaryBar />
-  //   </Allotment.Pane>
-  // );
 
   const sidebar = (
     <Allotment.Pane
@@ -73,9 +57,11 @@ export const Appshell = () => {
         <Allotment.Pane>
           <Allotment proportionalLayout={false}>
             <ActivitybarPane key="activitybar" minSize={48} maxSize={48}>
-              <Activitybar />
+              <Activitybar
+                setPrimarySideBar={() => setPrimarySideBar(!primarySideBar)}
+              />
             </ActivitybarPane>
-            {primarySideBarPosition === "left" ? sidebar : null}
+            {sidebar}
             <MainContentPane
               key="maincontent"
               minSize={300}
