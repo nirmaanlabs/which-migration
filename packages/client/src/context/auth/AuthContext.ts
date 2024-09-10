@@ -1,22 +1,14 @@
 import { createContext } from "react";
-
-// Create AuthContext
-export type TConnectParam = {
-  dbuser: string;
-  database: string;
-  dbpassword: string;
-  host: string;
-  port: number;
-};
+import { TConnectFunc } from "./types";
 
 type TAuthContext = {
-  connect: (params: TConnectParam) => Promise<boolean>;
+  connect: TConnectFunc;
   disconnect: () => void;
   isConnected: boolean;
 };
 
 export const AuthContext = createContext<TAuthContext>({
-  connect: () => Promise.resolve(true),
+  connect: async () => ({ database: "", dbuser: "", token: "" }),
   isConnected: false,
   disconnect: () => {},
 });

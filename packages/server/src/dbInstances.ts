@@ -1,5 +1,4 @@
 import { PgPool } from "@which-migration/pgops";
-import { EventEmitter } from "stream";
 class A {}
 
 interface DBMap {

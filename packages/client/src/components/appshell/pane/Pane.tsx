@@ -1,16 +1,11 @@
 import React, { useState } from "react";
-import { FilePlus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 import styles from "./pane.module.css";
 import { Box } from "@/components/ui/box";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
+import { AddNewConnectionModal } from "@/features/dbauth/AddNewConnectionModal";
 
 export type PaneProps = {
   children: React.ReactNode;
@@ -27,14 +22,14 @@ export const Pane = ({ children, title }: PaneProps) => {
             className={cn(
               styles.twistyContainer,
               "codicon",
-              expanded ? "codicon-chevron-down" : "codicon-chevron-up"
+              expanded ? "codicon-chevron-down" : "codicon-chevron-right"
             )}
           ></Box>
           <h3 className={styles.title}>{title}</h3>
         </Box>
 
         <Box className="db-actions">
-          <TooltipProvider delayDuration={100}>
+          {/* <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <FilePlus size={16} strokeWidth={1.5} />
@@ -43,7 +38,8 @@ export const Pane = ({ children, title }: PaneProps) => {
                 <p>Connect New Database</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider> */}
+          <AddNewConnectionModal />
         </Box>
       </Box>
       {expanded && <div className={styles.paneBody}>{children}</div>}

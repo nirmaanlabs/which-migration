@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
-import { AuthContext, TConnectParam } from "./AuthContext";
+import { AuthContext } from "./AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { TConnectFunc, TConnectParam, TConnectSuccessResponse } from "./types";
 
 // AuthProvider component to wrap your app
 type TAuthState = {
@@ -10,14 +11,8 @@ type TAuthState = {
   dbuser: string | null;
 };
 
-type PromiseConnectResponse = {
-  database: string;
-  dbuser: string;
-  token: string;
-};
-
 type AuthServiceProvider = {
-  connect: (params: TConnectParam) => Promise<unknown>;
+  connect: TConnectFunc;
   disconnect: () => Promise<unknown>;
 };
 
@@ -57,7 +52,7 @@ export const AuthContextProvider = (props: TAuthContextProvider) => {
         dbuser,
         port,
         host,
-      })) as unknown as PromiseConnectResponse;
+      })) as unknown as TConnectSuccessResponse;
 
       setAuthState({
         isConnected: true,
@@ -66,7 +61,7 @@ export const AuthContextProvider = (props: TAuthContextProvider) => {
         database: connection.database,
       });
 
-      return Promise.resolve(true);
+      return Promise.resolve(connection);
     } catch (e) {
       setAuthState({
         isConnected: false,
@@ -75,7 +70,7 @@ export const AuthContextProvider = (props: TAuthContextProvider) => {
         database: null,
       });
       console.error(e);
-      return Promise.reject(false);
+      return Promise.reject(e);
     }
   };
 

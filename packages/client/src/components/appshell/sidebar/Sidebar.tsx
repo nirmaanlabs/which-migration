@@ -2,6 +2,7 @@ import { Allotment } from "allotment";
 import { Pane } from "../pane/Pane";
 import { Document } from "../types";
 import styles from "./sidebar.module.css";
+import { useAuth } from "@/context/auth";
 
 export type SidebarProps = {
   title: string;
@@ -11,6 +12,7 @@ export type SidebarProps = {
 };
 
 export const Sidebar = () => {
+  const { isConnected } = useAuth();
   return (
     <div className={styles.sidebar}>
       <div className={styles.title}>
@@ -31,39 +33,7 @@ export const Sidebar = () => {
             minSize={22 + 22 * 22}
           >
             <Pane title="Open Editors">
-              {/* <div className={styles.list}>
-                {openEditors.map((document, index) => (
-                  <div key={index} className={styles.listRow}>
-                    <a
-                      className={classNames(
-                        "codicon codicon-close",
-                        styles.actionLabel
-                      )}
-                      role="button"
-                      title="Close Editor (⌘W)"
-                      onClick={() => {
-                        const newDocuments = [...openEditors];
-                        newDocuments.splice(index, 1);
-
-                        onOpenEditorsChange(newDocuments);
-                      }}
-                    ></a>
-                    <div className={styles.iconLabel}>
-                      <div className={styles.iconLabelContainer}>
-                        <span className={styles.iconNameContainer}>
-                          <a className={styles.labeName}>{document.title}</a>
-                        </span>
-                        <span className={styles.iconDescriptionContainer}>
-                          <span className={styles.labelDescription}>
-                            stories/components
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div> */}
-              <div>Champu dev</div>
+              <div>{isConnected ? "Connected" : "Not Connected"}</div>
             </Pane>
           </Allotment.Pane>
         </Allotment>

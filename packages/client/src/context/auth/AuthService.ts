@@ -1,5 +1,5 @@
 import { httpClient } from "../../httpClient/httpClient";
-import { TConnectParam } from "./AuthContext";
+import { TConnectParam } from "./types";
 
 export const AuthService = {
   connect: async (params: TConnectParam) => {
@@ -13,6 +13,7 @@ export const AuthService = {
       }
       return Promise.resolve(json);
     } catch (error) {
+      console.log({ error });
       return Promise.reject(error);
     }
   },
