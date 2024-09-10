@@ -6,6 +6,8 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    // test specific
+    "types": ["@testing-library/jest-dom"],
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -23,13 +25,12 @@
     // tailwind specific
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*",
-      ],
+      "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
-      "@types/*": ["./src/types/*"],
-
+      "@types/*": ["./src/types/*"]
     }
+
+    // test specific
   },
-  "include": ["src"]
+  "include": ["src", "./vitest.setup.ts"]
 }

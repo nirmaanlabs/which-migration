@@ -31,6 +31,7 @@ import { useForm } from "react-hook-form";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { TConnectFunc, TConnectParam } from "@/context/auth/types";
 import { useState } from "react";
+import HttpError from "@/httpClient/HttpError";
 
 interface IConnectToDBForm {
   dbuser: string;
@@ -69,32 +70,45 @@ export const AddNewConnectionModal = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: Partial<IConnectToDBForm>) {
-    mutateAsync(values, {
-      onSuccess: () => {
-        console.log("ABCD");
-        toast({
-          title: "Connected with Postgres Database",
-          variant: "success",
-        });
+    console.log("form submitted with values", values);
 
-        setIsOpen(false);
-      },
-      onError: (error) => {
-        console.error(error);
+    try {
+      await mutateAsync(values);
+      toast({
+        title: "Connected with Postgres Database",
+        variant: "success",
+      });
 
+      setIsOpen(false);
+    } catch (e) {
+      console.error(e);
+
+      if (e instanceof HttpError) {
         toast({
           title: "Unable to connect with Postgres Database",
-          description: error.message,
+          description: e.message,
           variant: "destructive",
         });
-      },
-    });
+      } else if (e instanceof Error) {
+        toast({
+          title: "Unable to connect with Postgres Database",
+          description: e.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Unable to connect with Postgres Database",
+          description: "Unknown error",
+          variant: "destructive",
+        });
+      }
+    }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Box>
+        <Box role="button" data-testid="add-db-btn">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -120,7 +134,11 @@ export const AddNewConnectionModal = () => {
           <DialogDescription>Provide Credentials to Login</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            data-testid="add-new-connection-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="dbuser"
@@ -184,8 +202,18 @@ export const AddNewConnectionModal = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isPending}>
-              {isPending ? <LoadingSpinner /> : "Connect"}
+            <Button
+              type="submit"
+              data-testid="connect-db-btn"
+              disabled={isPending}
+            >
+              {isPending ? (
+                <Box data-testid="loading-spinner">
+                  <LoadingSpinner />{" "}
+                </Box>
+              ) : (
+                "Connect"
+              )}
             </Button>
             {isPending}
           </form>

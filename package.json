@@ -7,13 +7,13 @@
   "scripts": {
     "client:dev": "pnpm --filter client dev",
     "client:build": "pnpm --filter client build",
+    "client:test": "pnpm --filter client test",
     "example:dev": "pnpm --filter example dev",
     "pgops:dev": "pnpm --filter postgres-ops dev",
     "pgops:build": "pnpm --filter postgres-ops build",
     "server:dev": "pnpm --filter server dev",
     "serve:build": "pnpm --filter server build",
-    "lint": "pnpx eslint",
-    "test": "vitest"
+    "lint": "pnpx eslint"
   },
   "keywords": [],
   "author": "",
