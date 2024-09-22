@@ -1,19 +1,14 @@
-import { ReactNode, useState } from "react";
-import { AuthContext } from "./AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { ReactNode, useReducer } from "react";
+import { AuthContext } from "./AuthContext";
 import { TConnectFunc, TConnectParam, TConnectSuccessResponse } from "./types";
+import { authReducer, initialAuthState } from "./useAuthReducer";
 
 // AuthProvider component to wrap your app
-type TAuthState = {
-  isConnected: boolean;
-  token: string | null;
-  database: string | null;
-  dbuser: string | null;
-};
 
 type AuthServiceProvider = {
   connect: TConnectFunc;
-  disconnect: () => Promise<unknown>;
+  disconnect: (connectionId: string) => Promise<unknown>;
 };
 
 type TAuthContextProvider = {
@@ -23,16 +18,13 @@ type TAuthContextProvider = {
 
 export const AuthContextProvider = (props: TAuthContextProvider) => {
   const { toast } = useToast();
-  const [authState, setAuthState] = useState<TAuthState>({
-    isConnected: false,
-    token: null,
-    dbuser: null,
-    database: null,
-  });
+
+  const [authState, dispatch] = useReducer(authReducer, initialAuthState);
 
   const { authServiceProvider } = props;
+
   const connect = async (params: TConnectParam) => {
-    const { database, dbpassword, dbuser, port, host } = params;
+    const { database: databaseName, dbpassword, dbuser, port, host } = params;
 
     try {
       if (
@@ -47,40 +39,27 @@ export const AuthContextProvider = (props: TAuthContextProvider) => {
       }
 
       const connection = (await authServiceProvider.connect({
-        database,
+        database: databaseName,
         dbpassword,
         dbuser,
         port,
         host,
       })) as unknown as TConnectSuccessResponse;
 
-      setAuthState({
-        isConnected: true,
-        token: "",
-        dbuser: connection.dbuser,
-        database: connection.database,
-      });
+      const { connectionId, dbtoken, database } = connection;
+
+      dispatch({ type: "DB_CONNECT_SUCCESS", connectionId, dbtoken, database });
 
       return Promise.resolve(connection);
     } catch (e) {
-      setAuthState({
-        isConnected: false,
-        token: null,
-        dbuser: null,
-        database: null,
-      });
+      dispatch({ type: "DB_CONNECT_FAIL" });
       console.error(e);
       return Promise.reject(e);
     }
   };
 
-  const disconnect = () => {
-    setAuthState({
-      isConnected: false,
-      token: null,
-      dbuser: null,
-      database: null,
-    });
+  const disconnect = async (connectionId: string) => {
+    dispatch({ type: "DB_CONNECT_DISCONNECT", connectionId });
   };
 
   return (

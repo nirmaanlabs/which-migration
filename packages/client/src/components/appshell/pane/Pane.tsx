@@ -5,14 +5,13 @@ import { cn } from "@/lib/utils";
 import styles from "./pane.module.css";
 import { Box } from "@/components/ui/box";
 
-import { AddNewConnectionModal } from "@/features/dbauth/AddNewConnectionModal";
-
 export type PaneProps = {
   children: React.ReactNode;
   title: string;
+  actions?: React.ReactElement;
 };
 
-export const Pane = ({ children, title }: PaneProps) => {
+export const Pane = ({ children, title, actions }: PaneProps) => {
   const [expanded, setExpanded] = useState(true);
   return (
     <Box className={styles.pane}>
@@ -28,19 +27,7 @@ export const Pane = ({ children, title }: PaneProps) => {
           <h3 className={styles.title}>{title}</h3>
         </Box>
 
-        <Box className="db-actions">
-          {/* <TooltipProvider delayDuration={100}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <FilePlus size={16} strokeWidth={1.5} />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Connect New Database</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider> */}
-          <AddNewConnectionModal />
-        </Box>
+        <Box className="db-actions">{actions}</Box>
       </Box>
       {expanded && <div className={styles.paneBody}>{children}</div>}
     </Box>

@@ -1,11 +1,12 @@
 import { DatabaseError } from "@which-migration/pgops";
 import { NextFunction, Request, Response } from "express";
-import { STATUS_MSG } from "../pg/constants";
+import { STATUS_MSG } from "@/pg/constants";
 
 export const errorHandler = (
   err: unknown,
   req: Request,
   res: Response,
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
@@ -20,7 +21,7 @@ export const errorHandler = (
   } else if (err instanceof Error) {
     res.status(500).json({
       status: STATUS_MSG.FAIL,
-      reason: "Postgres Database Error",
+      reason: "Error",
       message: err.message,
     });
   } else {

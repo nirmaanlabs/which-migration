@@ -12,6 +12,7 @@ export default [
     files: ["**/*.{js,mjs,cjs,ts}"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "off" }],
     },
   },
   { languageOptions: { globals: globals.browser } },

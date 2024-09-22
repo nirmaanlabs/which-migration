@@ -24,7 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAuth } from "@/context/auth";
+import { useAuthContext } from "@/context/auth/useAuthContext";
 import { Box } from "@components/ui/box";
 import { Button } from "@components/ui/button";
 import { useForm } from "react-hook-form";
@@ -54,7 +54,7 @@ const useConnect = (callbackFunc: TConnectFunc) => {
 
 export const AddNewConnectionModal = () => {
   const { toast } = useToast();
-  const { connect } = useAuth();
+  const { connect } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutateAsync, isPending } = useConnect(connect);

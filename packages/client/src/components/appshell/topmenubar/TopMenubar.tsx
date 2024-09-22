@@ -13,28 +13,47 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { AddNewProjectDrawer } from "@/features/project/AddNewProjectDrawer";
+import { useTheme } from "@/theme/useTheme";
+import { useState } from "react";
 
 export const TopMenubar = () => {
+  const { setTheme, theme } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
-      <Menubar className="bg-slate-800 rounded-none border-none pl-10">
+      <Menubar className="rounded-none border-none pl-10">
         <MenubarMenu>
           <MenubarTrigger>File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem>
-              New Tab <MenubarShortcut>⌘T</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem>
-              New Window <MenubarShortcut>⌘N</MenubarShortcut>
+            <MenubarItem
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
+              Add New Project
+              <MenubarShortcut>⇧⌘P</MenubarShortcut>
             </MenubarItem>
             <MenubarItem disabled>New Incognito Window</MenubarItem>
             <MenubarSeparator />
             <MenubarSub>
-              <MenubarSubTrigger>Share</MenubarSubTrigger>
+              <MenubarSubTrigger>Theme</MenubarSubTrigger>
               <MenubarSubContent>
-                <MenubarItem>Email link</MenubarItem>
-                <MenubarItem>Messages</MenubarItem>
-                <MenubarItem>Notes</MenubarItem>
+                <MenubarItem
+                  onClick={() => {
+                    setTheme("dark");
+                  }}
+                >
+                  Dark {theme === "dark" ? "\u2714" : ""}
+                </MenubarItem>
+                <MenubarItem
+                  onClick={() => {
+                    setTheme("light");
+                  }}
+                >
+                  Light {theme === "light" ? "\u2714" : ""}
+                </MenubarItem>
               </MenubarSubContent>
             </MenubarSub>
             <MenubarSeparator />
@@ -104,6 +123,7 @@ export const TopMenubar = () => {
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
+      <AddNewProjectDrawer open={isOpen} onClose={() => setIsOpen(!isOpen)} />
     </>
   );
 };

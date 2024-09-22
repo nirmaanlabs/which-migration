@@ -1,15 +1,16 @@
-import "./App.css";
 import { Appshell } from "@components/appshell";
-import styles from "./app.module.css";
 import { Box } from "@components/ui/box";
 import { Toaster } from "@components/ui/toaster";
+import { ThemeProvider } from "./theme/ThemeProvider";
 
 function App() {
   return (
-    <Box className={styles.appShellContainer}>
-      <Appshell />
-      <Toaster />
-    </Box>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <Box className="w-[90vw] h-[90vh] overflow-scroll resize font-sans">
+        <Appshell />
+        <Toaster />
+      </Box>
+    </ThemeProvider>
   );
 }
 

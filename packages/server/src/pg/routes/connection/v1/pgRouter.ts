@@ -1,23 +1,23 @@
 import { Router } from "express";
 import {
   disconnect,
-  establishConnection,
+  connect,
   selectOne,
-} from "../../../controller/connection/v1/connectionController";
-import {
-  dbConnectionMiddleware,
-  isConnectedToDB,
-} from "../../../middleware/dbConnectionMiddleware";
+} from "../../../controller/dbauth/v1/dbauth";
+import { validateRequest } from "../../../middleware/validateRequest";
+import { isConnectedToDB } from "../../../middleware/isConnectedToDB";
 
-export const pgRouter = Router();
+const pgRouter: Router = Router();
 
-pgRouter.use((req, res, next) => {
-  if (req.path === "/connect") {
-    return next(); // Skip middleware for /pg/connect
-  }
-  dbConnectionMiddleware(req, res, next);
-});
+// pgRouter.use((req, res, next) => {
+//   if (req.path === "/connect") {
+//     return next(); // Skip middleware for /pg/connect
+//   }
+// });
 
-pgRouter.route("/connect").post(isConnectedToDB, establishConnection);
+pgRouter.route("/connect").post(isConnectedToDB, connect);
+pgRouter.use(validateRequest);
 pgRouter.route("/disconnect").post(disconnect);
 pgRouter.route("/selectone").get(selectOne);
+
+export { pgRouter };

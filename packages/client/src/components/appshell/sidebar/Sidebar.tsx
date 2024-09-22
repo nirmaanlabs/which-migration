@@ -1,8 +1,9 @@
+import { Box } from "@/components/ui/box";
+import { ServerTree } from "@components/objecttree/Servertree";
 import { Allotment } from "allotment";
 import { Pane } from "../pane/Pane";
 import { Document } from "../types";
-import styles from "./sidebar.module.css";
-import { useAuth } from "@/context/auth";
+import { AddProjectButton } from "@/features/project/action/AddProjectButton";
 
 export type SidebarProps = {
   title: string;
@@ -12,32 +13,40 @@ export type SidebarProps = {
 };
 
 export const Sidebar = () => {
-  const { isConnected } = useAuth();
   return (
-    <div className={styles.sidebar}>
-      <div className={styles.title}>
-        <div className={styles.titleLabel}>
-          <h2>OBJECT EXPLORER</h2>
-        </div>
-        <div className={styles.titleActions}>
-          <div className={styles.actionsContainer}>
+    <Box className="h-full flex flex-col">
+      <Box className="flex overflow-hidden box-border px-2 h-9">
+        <Box className="pt-2">
+          <h2 className="text-xs">OBJECT EXPLORER</h2>
+        </Box>
+        <Box className="flex-1">
+          <Box className="flex items-center h-full w-full justify-end p-0 mx-0 my-auto">
             <a className="codicon codicon-ellipsis"></a>
-          </div>
-        </div>
-      </div>
-      <div className={styles.content}>
+          </Box>
+        </Box>
+      </Box>
+      <Box className="flex-1 text-sm">
         <Allotment vertical>
           <Allotment.Pane
+            key="openProject"
+            // maxSize={22 + 22 * 22}
+            minSize={22 + 22 * 22}
+          >
+            <Pane title="Project" actions={<AddProjectButton />}>
+              <ServerTree />
+            </Pane>
+          </Allotment.Pane>
+          {/* <Allotment.Pane
             key="openEditors"
             maxSize={22 + 22 * 22}
             minSize={22 + 22 * 22}
           >
             <Pane title="Open Editors">
-              <div>{isConnected ? "Connected" : "Not Connected"}</div>
+              <ServerTree />
             </Pane>
-          </Allotment.Pane>
+          </Allotment.Pane> */}
         </Allotment>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };

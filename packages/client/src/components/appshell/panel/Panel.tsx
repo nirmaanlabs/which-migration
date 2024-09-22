@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 
 import styles from "./panel.module.css";
 import { useRef } from "react";
+import { Box } from "@/components/ui/box";
 
 export type PanelProps = {
   maximized: boolean;
@@ -19,19 +20,22 @@ export const Panel = ({
   const ref = useRef(null!);
 
   return (
-    <div className={styles.panel}>
-      <div className={styles.title}>
-        <div className={styles.actionBar}>
-          <ul className={styles.actionsContainer}>
-            <li className={cn(styles.actionItem, "checked")}>
-              <a className={styles.actionLabel} style={{ background: "none" }}>
+    <Box className="h-full w-full flex flex-col">
+      <Box className="flex overflow-hidden justify-between px-2 h-9">
+        <Box className="leading-7">
+          <ul className="h-full w-full items-center p-0 mx-0 my-auto flex list-none">
+            <li className="uppercase items-center  justify-center cursor-pointer relative text-sm px-1 py-2">
+              <a
+                className="rounded-sm p-1 text-sm "
+                style={{ background: "none" }}
+              >
                 Results
               </a>
-              <div className={styles.activeItemIndicator} />
+              <Box className={styles.activeItemIndicator} />
             </li>
           </ul>
-        </div>
-        <div>
+        </Box>
+        <Box>
           <ul className={styles.actionsContainer}>
             <li>
               {maximized ? (
@@ -65,11 +69,13 @@ export const Panel = ({
               ></a>
             </li>
           </ul>
-        </div>
-      </div>
-      <div className={styles.content}>
-        <div ref={ref} className={styles.terminalWrapper}></div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+      <Box className={styles.content}>
+        <Box ref={ref} className={styles.terminalWrapper}>
+          "-" some results
+        </Box>
+      </Box>
+    </Box>
   );
 };

@@ -30,7 +30,7 @@ const EditorPane = Allotment.Pane;
 const QueryPane = Allotment.Pane;
 
 export const Appshell = () => {
-  const [openEditors, setOpenEditors] = useState(DOCUMENTS);
+  // const [openEditors, setOpenEditors] = useState(DOCUMENTS);
   const [editorVisible, setEditorVisible] = useState(true);
   const [panelVisible, setPanelVisible] = useState(true);
   const [primarySideBar, setPrimarySideBar] = useState(true);
@@ -69,12 +69,7 @@ export const Appshell = () => {
             >
               <Allotment vertical snap>
                 <EditorPane key="editor" minSize={70}>
-                  <Editor
-                    documents={openEditors}
-                    onDocumentsChange={(docs) => {
-                      setOpenEditors(docs);
-                    }}
-                  />
+                  <Editor />
                 </EditorPane>
                 <QueryPane
                   key="query"

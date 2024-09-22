@@ -2,10 +2,12 @@ import { NextFunction, Response } from "express";
 import { PgPool } from "@which-migration/pgops";
 import { TypedRequestBody } from "../../../../types/TypedRequestBody";
 import { ConnectionBody } from "./types";
-import { removeConnection, setConnection } from "../../../../dbInstances";
+import { dbInstance } from "../../../../dbInstances";
 import { PG_DB_MSG, STATUS_MSG } from "../../../constants";
+import { createToken } from "../../../../utils/createToken";
+import { getRandomConnectionId } from "../../../../utils/getRandomConnectionId";
 
-export const establishConnection = async (
+export const connect = async (
   req: TypedRequestBody<ConnectionBody>,
   res: Response,
   next: NextFunction
@@ -22,12 +24,17 @@ export const establishConnection = async (
     const pool = new PgPool({ user, database, password, host, port });
     console.log(user, database, password, host, port);
     await pool.query("select 1");
-    setConnection("pg", pool);
+
+    const token = createToken({ host, port, database, dbType: "pg" });
+    const connectionId = getRandomConnectionId();
+    dbInstance.setConnection(connectionId, { db: pool, token });
     res.status(200).json({
       status: STATUS_MSG.SUCCESS,
       message: PG_DB_MSG.CONNECTED,
-      databaseName: database,
-      user: user,
+      database,
+      dbuser: user,
+      connectionId,
+      dbtoken: token,
     });
   } catch (error) {
     console.log("passing error to handler", error instanceof Error);
@@ -40,13 +47,17 @@ export const selectOne = async (
   res: Response
 ) => {
   try {
-    const db = req.db?.pg;
-    const dbRes = await db?.query("select 1");
-    res.status(200).json({
-      status: STATUS_MSG.SUCCESS,
-      message: "selectOne",
-      data: dbRes?.rows,
-    });
+    const connectionId = req.headers["X-WHMG-ConnectionId"] as string;
+    const connection = dbInstance.getConnection(connectionId);
+    if (connection) {
+      const db = connection.db as PgPool;
+      const dbRes = await db.query("select 1");
+      res.status(200).json({
+        status: STATUS_MSG.SUCCESS,
+        message: "selectOne",
+        data: dbRes?.rows,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -62,9 +73,8 @@ export const disconnect = async (
   next: NextFunction
 ) => {
   try {
-    const db = req.db?.pg;
-    db?.disconnect();
-    removeConnection("pg");
+    const connectionId = req.headers["X-WHMG-ConnectionId"] as string;
+    dbInstance.removeConnection(connectionId);
     res.status(200).json({
       status: STATUS_MSG.SUCCESS,
       message: PG_DB_MSG.DISCONNECTED,

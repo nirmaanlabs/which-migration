@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest"; // Use Vitest's functions instead of Jest's
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { AddNewConnectionModal } from "./AddNewConnectionModal"; // Adjust the path as per your structure
-import { useAuth } from "@/context/auth";
+import { useAuthContext } from "@/context/auth/useAuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 /**
@@ -26,7 +26,7 @@ describe("AddNewConnectionModal", () => {
   const mockConnect = vi.fn();
 
   beforeEach(() => {
-    (useAuth as Mock).mockReturnValue({ connect: mockConnect });
+    (useAuthContext as Mock).mockReturnValue({ connect: mockConnect });
     (useToast as Mock).mockReturnValue(mockToast);
     (useMutation as Mock).mockReturnValue({
       mutateAsync: vi.fn(),
