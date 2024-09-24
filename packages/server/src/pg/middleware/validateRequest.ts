@@ -8,18 +8,18 @@ export const validateRequest = async (
   next: NextFunction
 ) => {
   try {
-    const connectionId = req.headers["X-WHMG-ConnectionId"];
+    const connectionId = req.headers["x-whmg-connectionid"];
     const authHeader = req.headers.authorization;
 
     if (!connectionId) {
-      res.status(400).json({
+      return res.status(400).json({
         status: STATUS_MSG.FAIL,
         message: "Missing Header X-WHMG-ConnectionId",
       });
     }
 
     if (!authHeader) {
-      res.status(400).json({
+      return res.status(400).json({
         status: STATUS_MSG.FAIL,
         message: "Missing Header authorization",
       });
