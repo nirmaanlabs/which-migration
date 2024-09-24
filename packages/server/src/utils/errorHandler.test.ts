@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { errorHandler } from "./errorHandler";
 import { Request, Response, NextFunction } from "express";
 import { DatabaseError } from "@which-migration/pgops";
-import { STATUS_MSG } from "../pg/constants";
+import { STATUS_MSG } from "@/pg/constants";
 
 describe("errorHandler middleware", () => {
   it("should handle DatabaseError correctly", () => {

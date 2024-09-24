@@ -12,7 +12,7 @@ describe("validateRequest middleware", () => {
   it("should call next if both headers are present", async () => {
     const req = {
       headers: {
-        "X-WHMG-ConnectionId": "mocked_connection_id",
+        "x-whmg-connectionid": "mocked_connection_id",
         authorization: "Bearer token",
       },
     } as any; // Adjust type as needed
@@ -51,7 +51,7 @@ describe("validateRequest middleware", () => {
   it("should return 400 if authorization header is missing", async () => {
     const req = {
       headers: {
-        "X-WHMG-ConnectionId": "mocked_connection_id",
+        "x-whmg-connectionid": "mocked_connection_id",
       },
     } as any;
 
